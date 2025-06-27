@@ -4,6 +4,7 @@ const user = require('../models/User');
 const SALT = Number(process.env.SALT);
 
 const jwt = require('jsonwebtoken');
+const User = require('../models/User');
 const JWT_SECRET = process.env.JWT_SECRET;
 
 
@@ -13,7 +14,7 @@ router.post('/user', async (req, res) => {
         const {firstName, lastName, email, password} = req.body;
         console.log(firstName, lastName, email, password,);
 
-        const newUser = new user({
+        const newUser = new User({
             firstName,
             lastName,
             email,
@@ -41,16 +42,18 @@ router.post('/user', async (req, res) => {
 router.post('/login', async (req, res) => {
     try{
         const {email, password} = req.body;
-        let foundUser = await user.find({email});
+        
+        let foundUser = await User.findOne({email});
+
         console.log(foundUser);
 
-        if (!foundUser.length) throw Error(`${email} User not found`);
+        if (!foundUser) throw Error(`${email} User not found`);
 
-        const ifFound = await bcryptjs.compare(password, foundUser[0].password);
+        const verifiedPwd = await bcryptjs.compare(password, foundUser.password);
     
-        if (!ifFound) throw Error(`invalid password`);
+        if (!verifiedPwd) throw Error(`invalid password`);
 
-        const token = jwt.sign({id: ifFound._id}, JWT_SECRET, {expiresIn: '1h'});
+        const token = jwt.sign({id: foundUser._id}, JWT_SECRET, {expiresIn: '1h'});
 
         res.status(200).json({
             message: 'Login successful',
@@ -59,7 +62,7 @@ router.post('/login', async (req, res) => {
 
     }   catch (error) {
         console.error(error);
-        res.status(500).json({message: 'invalid password'});
+        res.status(500).json({message: 'Internal server error'});
     }
 }
 );
@@ -69,7 +72,7 @@ router.put('/:id', async (req, res) => {
         const {firstName, lastName, email, password} = req.body;
         const { id } = req.params;
 
-        const updatedUser = await user.findByIdAndUpdate(
+        const updatedUser = await User.findByIdAndUpdate(
             id,
             { firstName, lastName, email, password: bcryptjs.hashSync(password, SALT) },
             { new: true }
@@ -92,9 +95,9 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        console.log(id)
+        console.log("Deleting user with ID:", id)
 
-        const deleteUser = await user.findByIdAndDelete(req.params.id);
+        const deleteUser = await User.findByIdAndDelete(id);
         
         if (!deleteUser) throw new Error('User not found')
 

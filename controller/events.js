@@ -31,7 +31,7 @@ router.post('/event', async (req, res) => {
         await newEvent.save();
 
         res.status(201).json({
-            EventForm,
+            event: newEvent,
             message: 'Event created successfully'
         });
 
@@ -43,12 +43,13 @@ router.post('/event', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
     try {
-        const { body } = req.body;
         const { id } = req.params;
+        const updateFields = req.body;
+        
 
         const updatedEvent = await EventForm.findByIdAndUpdate(
             id,
-            { body },
+            updateFields,
             { new: true }
         );
         console.log(updatedEvent);
@@ -73,7 +74,7 @@ router.delete('/:id', async (req, res) => {
         const { id } = req.params;
         console.log(id)
 
-        const deleteEvent = await EventForm.findByIdAndDelete(req.params.id);
+        const deleteEvent = await EventForm.findByIdAndDelete(id);
         console.log(deleteEvent);
 
         if (!deleteEvent) throw new Error('Event not found');

@@ -17,5 +17,6 @@ const connectDB = async () => {
         console.log('Error connecting to React Chat Project:', error.message);
     }
 }
+
 module.exports = { connectDB, mongoose }
 
