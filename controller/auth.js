@@ -1,8 +1,6 @@
 const router = require('express').Router();
 const bcryptjs = require('bcryptjs');
-const user = require('../models/User');
 const SALT = Number(process.env.SALT);
-
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -49,11 +47,11 @@ router.post('/login', async (req, res) => {
 
         if (!foundUser) throw Error(`${email} User not found`);
 
-        const verifiedPwd = await bcryptjs.compare(password, foundUser.password);
+        const ifFound = await bcryptjs.compare(password, foundUser.password);
     
-        if (!verifiedPwd) throw Error(`invalid password`);
+        if (!ifFound) throw Error(`invalid password`);
 
-        const token = jwt.sign({id: foundUser._id}, JWT_SECRET, {expiresIn: '1h'});
+        const token = jwt.sign({id: foundUser._id}, JWT_SECRET, {expiresIn: '24h'});
 
         res.status(200).json({
             message: 'Login successful',

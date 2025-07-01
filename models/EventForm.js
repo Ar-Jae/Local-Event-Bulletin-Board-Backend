@@ -17,9 +17,20 @@ const Event = new mongoose.Schema(
             max: 250,
             required: true,
         },
-        when: {
+        Date: {
             type: Date,
             default: Date.now,
+
+        },
+        Time: {
+            type: String,
+            default: "HH:MM:SS",
+            required: true,
+            // This is a string that represents the time of the event
+            // It is in the format of HH:MM, where HH is the hour and MM is the minute
+            // It is required to select one of the times from the list when creating an event
+            // This will help in filtering events based on time
+            // This will help in searching events based on time
         },
         Category: {
             type: String,
@@ -34,11 +45,22 @@ const Event = new mongoose.Schema(
             // This will help in searching events based on categories
 
             enum: [
-                'Block Party','Yard Sale','Workshop',
-                'Yoga Class','Town Hall','Book Club',
-                'Art Show','Clean-Up Drive','Fundraiser',
-                'Kids Activity','Cultural Festival','Open Mic',
-                'Fitness Class','Movie Night','Community BBQ'],
+                'Art Show',
+                'Block Party',
+                'Book Club',
+                'Clean-Up Drive',
+                'Community BBQ',
+                'Cultural Festival',
+                'Fitness Class',
+                'Fundraiser',
+                'Kids Activity',
+                'Movie Night',
+                'Open Mic',
+                'Town Hall',
+                'Workshop',
+                'Yard Sale',
+                'Yoga Class'
+              ],
             required: true,
         }
     },

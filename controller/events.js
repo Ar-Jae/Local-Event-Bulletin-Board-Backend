@@ -17,13 +17,14 @@ router.get('/events', async (req, res) => {
 
 router.post('/event', async (req, res) => {
     try {
-        const {Title, Description, Location, when, Category} = req.body;
+        const {Title, Description, Location, date,Time, Category} = req.body;
 
         const newEvent = new EventForm({
             Title,
             Description,
             Location,
-            when: when || Date.now(),
+            date: date || Date.now(),
+            Time,
             Category
         });
         console.log(newEvent);
