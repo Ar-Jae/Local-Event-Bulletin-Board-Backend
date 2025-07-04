@@ -9,14 +9,15 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 router.post('/user', async (req, res) => {
     try {
-        const {firstName, lastName, email, password} = req.body;
-        console.log(firstName, lastName, email, password,);
+        const {firstName, lastName, email, password, isAdmin} = req.body;
+        console.log(firstName, lastName, email, password, isAdmin);
 
         const newUser = new User({
             firstName,
             lastName,
             email,
-            password: bcryptjs.hashSync(password, SALT)
+            password: bcryptjs.hashSync(password, SALT),
+            isAdmin: false // Default value, can be changed later
         });
 
         await newUser.save();

@@ -17,12 +17,13 @@ router.get('/events', async (req, res) => {
 
 router.post('/event', async (req, res) => {
     try {
-        const {Title, Description, Location, date,Time, Category} = req.body;
+        const {Title, Description, Location,image, date, Time, Category} = req.body;
 
         const newEvent = new EventForm({
             Title,
             Description,
             Location,
+            image: image || "https://via.placeholder.com/150",
             date: date || Date.now(),
             Time,
             Category
@@ -47,6 +48,7 @@ router.put('/:id', async (req, res) => {
         const { id } = req.params;
         const updateFields = req.body;
         
+// create isAdmin permissions 
 
         const updatedEvent = await EventForm.findByIdAndUpdate(
             id,
@@ -74,7 +76,7 @@ router.delete('/:id', async (req, res) => {
     try {
         const { id } = req.params;
         console.log(id)
-
+// create isAdmin permissions
         const deleteEvent = await EventForm.findByIdAndDelete(id);
         console.log(deleteEvent);
 
