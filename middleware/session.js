@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const Admin = require('../models/Admin');
 
 const JWT_SECRET = process.env.JWT_SECRET;
 console.log("JWT_SECRET:", JWT_SECRET ? "SET" : "NOT SET");
@@ -25,15 +26,34 @@ const sessionValidation = async (req, res, next) => {
             
         const payload = jwt.verify(authToken, JWT_SECRET);
         const foundUser = await User.findById(payload.id);
+        const foundAdmin = await Admin.findById(payload.id);
+
+        if (!foundUser && !foundAdmin) {
+            throw new Error("Unauthorized");
+        }
 
         console.log("User:", foundUser ? "FOUND" : "NOT FOUND");
+        console.log("Admin:", foundAdmin ? "FOUND" : "NOT FOUND");
         
         req.User = {
-            id: foundUser.id, 
-            email: foundUser.email,  
-        };
+            id: foundUser ? foundUser.id : null, 
+            email: foundUser ? foundUser.email : null,
+            isAdmin: foundUser ? foundUser.isAdmin : false,  
+        }
+        //req.User = {
+        //    id: foundUser.id, 
+        //    email: foundUser.email,
+        //    isAdmin: foundUser.isAdmin,  
+        //};
 
         console.log("User in Request:", req.User);
+
+        req.Admin = {
+            id: foundAdmin ? foundAdmin.id : null, 
+            email: foundAdmin ? foundAdmin.email : null,
+            isAdmin: foundAdmin ? true : false,  
+        };
+        console.log("Admin in Request:", req.Admin);
 
         next();
 

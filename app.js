@@ -6,17 +6,19 @@ const {connectDB} = require("./config/db")
 const cors = require("cors")
 const PORT = process.env.PORT || 4000
 
-const authRoutes = require("./controller/auth")
+const authRoutes = require("./controller/Auth")
 const eventRoutes = require("./controller/events")
+const AdminUserRoutes = require("./controller/AdminUser")
 
 
-const sessionValidation = require("./middleware/session")
+const sessionValidation = require("./middleware/Session")
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(cors())
 
 app.use('/auth', authRoutes)
+app.use('/adminUser', AdminUserRoutes)
 app.use('/events',sessionValidation, eventRoutes)
 
 
