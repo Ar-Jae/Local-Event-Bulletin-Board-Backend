@@ -27,7 +27,7 @@ router.post('/user', async (req, res) => {
 
         await newUser.save();
 
-        const token = jwt.sign({id: newUser._id}, JWT_SECRET, {expiresIn: '24h'});
+        const token = jwt.sign({id: newUser._id}, JWT_SECRET, {expiresIn: '1h'});
         console.log(token);
 
         res.status(201).json({
@@ -57,7 +57,7 @@ router.post('/login', async (req, res) => {
     
         if (!ifFound) throw Error(`invalid password`);
 
-        const token = jwt.sign({id: foundUser._id}, JWT_SECRET, {expiresIn: '24h'});
+        const token = jwt.sign({id: foundUser._id}, JWT_SECRET, {expiresIn: '1h'});
 
         res.status(200).json({
             message: 'Login successful',
