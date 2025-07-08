@@ -17,7 +17,7 @@ const Event = new mongoose.Schema(
         // This will help in understanding the event details
         Description: {
             type: String,
-            max: 500,
+            max: 100,
             required: true,
         },
         // Location is the location of the event

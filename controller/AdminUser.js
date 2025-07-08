@@ -5,8 +5,6 @@ const jwt = require('jsonwebtoken');
 const Admin = require('../models/Admin');
 const JWT_SECRET = process.env.JWT_SECRET;
 
-
-
 router.post('/admin', async (req, res) => {
     try {
         const {firstName, lastName, email, password} = req.body;

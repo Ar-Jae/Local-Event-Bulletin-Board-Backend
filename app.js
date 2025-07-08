@@ -11,22 +11,18 @@ const eventRoutes = require("./controller/events")
 const AdminUserRoutes = require("./controller/AdminUser")
 const ReportedPostRoutes = require("./controller/ReportedPost")
 
-
 const sessionValidation = require("./middleware/Session")
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(cors())
 
-app.use('/auth', authRoutes)
-app.use('/adminUser', AdminUserRoutes)
-app.use('/reportedPost',sessionValidation, ReportedPostRoutes)
-app.use('/events',sessionValidation, eventRoutes)
-
-
+app.use('/api/auth', authRoutes)
+app.use('/api/adminUser', AdminUserRoutes)
+app.use('/api/reportedPost',sessionValidation, ReportedPostRoutes)
+app.use('/api/events',sessionValidation, eventRoutes)
 
 app.use(router)
-
 
 app.listen(PORT, () => {
     connectDB()
