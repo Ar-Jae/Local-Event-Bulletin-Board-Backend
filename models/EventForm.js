@@ -10,6 +10,7 @@ const Event = new mongoose.Schema(
             type: String,
             max: 50,
             required: true,
+            
         },
         // Description is the description of the event
         // It is in the format of a string
@@ -33,15 +34,17 @@ const Event = new mongoose.Schema(
         // It is required to select a date from the calendar when creating an event 
         Date: {
             type: Date,
-            default: Date.now,
-
+            required: true,
+            default: Date
+            
         },
         // Time is the time of the event
         // It is in the format of HH:MM:SS  
         Time: {
             type: String,
-            default: "00:00:00",
             required: true,
+            default: "00:00",
+            match: [/^\d{2}:\d{2}$/, "Please enter time in HH:MM format"],
             // This is a string that represents the time of the event
             // It is in the format of HH:MM, where HH is the hour and MM is the minute
             // It is required to select one of the times from the list when creating an event
@@ -84,7 +87,9 @@ const Event = new mongoose.Schema(
         // This will help in displaying the event image
         image: {
             type: String,
+            required: false,
             default: "https://via.placeholder.com/150"
+
         },
     },},
     { timestamps: true }
