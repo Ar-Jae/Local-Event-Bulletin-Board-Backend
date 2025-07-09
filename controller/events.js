@@ -17,16 +17,16 @@ router.get('/events', async (req, res) => {
 
 router.post('/event', async (req, res) => {
     try {
-        const {Title, Description, Location,image, date, Time, Category} = req.body;
+        const {Title, Description, Location, date, Time, Category, image} = req.body;
 
         const newEvent = new EventForm({
             Title,
             Description,
             Location,
-            image: image || "https://via.placeholder.com/150",
             date: date || Date.now(),
             Time,
-            Category
+            Category,
+            image: image || "https://images.unsplash.com/photo-1667489022797-ab608913feeb?auto=format&fit=crop&w=800&q=60"
         });
         console.log(newEvent);
 

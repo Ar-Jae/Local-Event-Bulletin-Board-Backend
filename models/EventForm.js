@@ -28,15 +28,6 @@ const Event = new mongoose.Schema(
             max: 100,
             required: true,
         },
-        // Image is the image URL of the event
-        // It is in the format of a URL
-        // It is optional to provide an image URL when creating an event
-        // This will help in displaying the event image
-        image: {
-            type: String,
-            default: "https://via.placeholder.com/150",
-
-        },
         // Date is the date of the event
         // It is in the format of YYYY-MM-DD
         // It is required to select a date from the calendar when creating an event 
@@ -87,8 +78,15 @@ const Event = new mongoose.Schema(
                 'Yoga Class'
               ],
             required: true,
-        }
-    },
+        // Image is the image URL of the event
+        // It is in the format of a URL
+        // It is optional to provide an image URL when creating an event
+        // This will help in displaying the event image
+        image: {
+            type: String,
+            default: "https://via.placeholder.com/150"
+        },
+    },},
     { timestamps: true }
 )
 

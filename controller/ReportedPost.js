@@ -1,12 +1,12 @@
-const Report = require('../models/report');
+const Report = require('../models/Report');
 const router = require('express').Router();
 
 
 router.get('/reports', async (req, res) => {
     try {
-        const events = await Report.find();
-        res.status(200).json(events);
-        console.log(events);
+        const reports = await Report.find();
+        res.status(200).json(reports);
+        console.log(reports);
 
     } catch (error) {
         console.error(error);
