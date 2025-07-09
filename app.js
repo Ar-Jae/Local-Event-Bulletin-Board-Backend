@@ -10,6 +10,7 @@ const authRoutes = require("./controller/Auth")
 const eventRoutes = require("./controller/events")
 const AdminUserRoutes = require("./controller/AdminUser")
 const ReportedPostRoutes = require("./controller/ReportedPost")
+const ContactRoutes = require("./controller/QuickContact")
 
 const sessionValidation = require("./middleware/Session")
 
@@ -19,6 +20,7 @@ app.use(cors())
 
 app.use('/api/auth', authRoutes)
 app.use('/api/adminUser', AdminUserRoutes)
+app.use('/api/contact', ContactRoutes)
 app.use('/api/reportedPost',sessionValidation, ReportedPostRoutes)
 app.use('/api/events',sessionValidation, eventRoutes)
 
