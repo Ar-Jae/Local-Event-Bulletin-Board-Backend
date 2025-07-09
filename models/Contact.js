@@ -2,7 +2,7 @@ const { mongoose } = require("../config/db")
 
 const Contact= new mongoose.Schema(
     {
-        Name: {
+        name: {
             type: String,
             required: true,
             max: 50,
@@ -10,7 +10,7 @@ const Contact= new mongoose.Schema(
         email: {
             type: String,
             required: true,
-            unique: true,
+            unique: false,
         },
         message: {
             type: String,
