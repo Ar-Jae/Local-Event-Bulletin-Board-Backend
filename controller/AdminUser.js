@@ -54,11 +54,16 @@ router.post('/login', async (req, res) => {
     
         if (!ifFound) throw Error(`invalid password`);
 
-        const token = jwt.sign({id: foundAdmin._id}, JWT_SECRET, {expiresIn: '24h'});
+        const token = jwt.sign(
+            { id: foundAdmin._id, isAdmin: foundAdmin.isAdmin },
+            JWT_SECRET,
+            { expiresIn: '24h' }
+        );
 
         res.status(200).json({
             message: 'Admin login successful',
             token,
+            isAdmin: foundAdmin.isAdmin
         });
 
     }   catch (error) {
