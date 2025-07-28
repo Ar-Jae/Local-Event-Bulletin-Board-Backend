@@ -52,3 +52,27 @@ Experience with full-stack MERN development
 Basic database interaction with MongoDB
 Intro to auth flows using JWT or sessions
 Confidence in solo project delivery
+
+# Setup Instructions
+
+## Environment Variables
+Copy `.env.example` to `.env` and fill in your credentials:
+```
+cp .env.example .env
+```
+
+## Install Dependencies
+Run:
+```
+npm install
+```
+
+## Linting & Formatting
+- Run ESLint: `npx eslint .`
+- Run Prettier: `npx prettier --check .`
+
+## Testing
+Run all tests:
+```
+npm test
+```
