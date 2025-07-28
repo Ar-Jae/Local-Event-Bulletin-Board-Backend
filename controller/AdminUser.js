@@ -21,17 +21,59 @@ router.post('/admin', async (req, res) => {
             lastName,
             email,
             password: bcryptjs.hashSync(password, SALT),
+            isAdmin: false,
+            status: 'pending',
         });
         await newAdmin.save();
 
-        const token = jwt.sign({id: newAdmin._id}, JWT_SECRET, {expiresIn: '24h'});
-        console.log(token);
-
         res.status(201).json({
-            message: 'Admin created successfully',
-            newAdmin,
-            token
+            message: 'Admin request submitted and pending approval',
+            newAdmin
         });
+// Get all pending admin requests
+router.get('/pending', async (req, res) => {
+    try {
+        const pendingAdmins = await Admin.find({ status: 'pending' });
+        res.status(200).json(pendingAdmins);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+// Approve an admin request
+router.post('/approve/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const updatedAdmin = await Admin.findByIdAndUpdate(
+            id,
+            { status: 'approved', isAdmin: true },
+            { new: true }
+        );
+        if (!updatedAdmin) throw new Error('Admin not found');
+        res.status(200).json({ message: 'Admin approved', updatedAdmin });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+// Disapprove an admin request
+router.post('/disapprove/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const updatedAdmin = await Admin.findByIdAndUpdate(
+            id,
+            { status: 'disapproved', isAdmin: false },
+            { new: true }
+        );
+        if (!updatedAdmin) throw new Error('Admin not found');
+        res.status(200).json({ message: 'Admin disapproved', updatedAdmin });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
 
     } catch (error) {
         console.error(error);

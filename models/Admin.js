@@ -23,7 +23,12 @@ const UserAdmin= new mongoose.Schema(
         },
         isAdmin: {
             type: Boolean,
-            default: true,
+            default: false,
+        },
+        status: {
+            type: String,
+            enum: ['pending', 'approved', 'disapproved'],
+            default: 'pending',
         },
     },
     { timestamps: true }
