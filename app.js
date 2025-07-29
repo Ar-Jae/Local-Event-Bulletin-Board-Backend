@@ -24,6 +24,8 @@ app.use('/api/contact', ContactRoutes)
 app.use('/api/reportedPost',sessionValidation, ReportedPostRoutes)
 app.use('/api/events',sessionValidation, eventRoutes)
 
+app.use('/uploads', require('express').static(require('path').join(__dirname, 'uploads')));
+
 app.use(router)
 
 app.listen(PORT, () => {

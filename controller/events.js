@@ -1,6 +1,19 @@
-const EventForm = require('../models/EventForm');
 
+const EventForm = require('../models/EventForm');
 const router = require('express').Router();
+const multer = require('multer');
+const path = require('path');
+
+// Set up multer storage
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, '../uploads/'));
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + '-' + file.originalname);
+  }
+});
+const upload = multer({ storage });
 
 
 router.get('/events', async (req, res) => {
@@ -15,18 +28,22 @@ router.get('/events', async (req, res) => {
     }
 });
 
-router.post('/event', async (req, res) => {
+router.post('/event', upload.single('Image'), async (req, res) => {
     try {
-        const {Title, Description, Location, date, Time, Category, image} = req.body;
+        const { Title, Description, Location, Date, Time, Category } = req.body;
+        let imageUrl = req.body.image || "https://images.unsplash.com/photo-1667489022797-ab608913feeb?auto=format&fit=crop&w=800&q=60";
+        if (req.file) {
+            imageUrl = `/uploads/${req.file.filename}`;
+        }
 
         const newEvent = new EventForm({
             Title,
             Description,
             Location,
-            date: date || Date.now(),
+            date: Date || Date.now(),
             Time,
             Category,
-            image: image || "https://images.unsplash.com/photo-1667489022797-ab608913feeb?auto=format&fit=crop&w=800&q=60"
+            image: imageUrl
         });
         console.log(newEvent);
 
