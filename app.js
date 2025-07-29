@@ -11,6 +11,10 @@ const eventRoutes = require("./controller/events")
 const AdminUserRoutes = require("./controller/AdminUser")
 const ReportedPostRoutes = require("./controller/ReportedPost")
 const ContactRoutes = require("./controller/QuickContact")
+const RSVPRoute = require("./controller/RSVP")
+const CommentRoute = require("./controller/Comment")
+const UserProfileRoute = require("./controller/UserProfile")
+const NotificationRoute = require("./controller/Notification")
 
 const sessionValidation = require("./middleware/Session")
 
@@ -23,6 +27,10 @@ app.use('/api/adminUser', AdminUserRoutes)
 app.use('/api/contact', ContactRoutes)
 app.use('/api/reportedPost',sessionValidation, ReportedPostRoutes)
 app.use('/api/events',sessionValidation, eventRoutes)
+app.use('/api/rsvp', RSVPRoute)
+app.use('/api/comment', CommentRoute)
+app.use('/api/userprofile', UserProfileRoute)
+app.use('/api/notification', NotificationRoute)
 
 app.use('/uploads', require('express').static(require('path').join(__dirname, 'uploads')));
 

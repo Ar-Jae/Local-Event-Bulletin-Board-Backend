@@ -81,15 +81,18 @@ const Event = new mongoose.Schema(
                 'Yoga Class'
               ],
             required: true,
-        // Image is the image URL of the event
-        // It is in the format of a URL
-        // It is optional to provide an image URL when creating an event
-        // This will help in displaying the event image
-        image: {
+        // images is an array of image URLs for the event
+        // It is optional to provide images when creating an event
+        // This will help in displaying an event gallery
+        images: [{
             type: String,
             required: false,
-            default: "https://via.placeholder.com/150"
-
+        }],
+        // Status for admin approval workflow
+        status: {
+            type: String,
+            enum: ['pending', 'approved', 'rejected'],
+            default: 'pending',
         },
     },},
     { timestamps: true }

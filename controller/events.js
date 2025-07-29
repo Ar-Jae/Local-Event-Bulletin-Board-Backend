@@ -1,8 +1,24 @@
-
-const EventForm = require('../models/EventForm');
 const router = require('express').Router();
+const EventForm = require('../models/EventForm');
 const multer = require('multer');
 const path = require('path');
+
+// Event search and filtering endpoint
+router.get('/search', async (req, res) => {
+  try {
+    const { category, date, location, title } = req.query;
+    const filter = {};
+    if (category) filter.Category = category;
+    if (date) filter.Date = { $eq: new Date(date) };
+    if (location) filter.Location = { $regex: location, $options: 'i' };
+    if (title) filter.Title = { $regex: title, $options: 'i' };
+    const events = await EventForm.find(filter);
+    res.status(200).json(events);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+const { body, validationResult } = require('express-validator');
 
 // Set up multer storage
 const storage = multer.diskStorage({
@@ -28,12 +44,31 @@ router.get('/events', async (req, res) => {
     }
 });
 
-router.post('/event', upload.single('Image'), async (req, res) => {
+router.post(
+  '/event',
+  upload.single('Image'),
+  [
+    body('Title').notEmpty().withMessage('Title is required'),
+    body('Description').notEmpty().withMessage('Description is required'),
+    body('Location').notEmpty().withMessage('Location is required'),
+    body('Date').notEmpty().withMessage('Date is required'),
+    body('Time').notEmpty().withMessage('Time is required'),
+    body('Category').notEmpty().withMessage('Category is required'),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
     try {
-        const { Title, Description, Location, Date, Time, Category } = req.body;
-        let imageUrl = req.body.image || "https://images.unsplash.com/photo-1667489022797-ab608913feeb?auto=format&fit=crop&w=800&q=60";
+      const { Title, Description, Location, Date, Time, Category } = req.body;
+      let imageUrl = req.body.image || "https://images.unsplash.com/photo-1667489022797-ab608913feeb?auto=format&fit=crop&w=800&q=60";
         if (req.file) {
             imageUrl = `/uploads/${req.file.filename}`;
+            console.log('Image file saved:', req.file.path);
+            console.log('Image URL for DB:', imageUrl);
+        } else {
+            console.log('No image file uploaded, using default:', imageUrl);
         }
 
         const newEvent = new EventForm({
@@ -45,20 +80,22 @@ router.post('/event', upload.single('Image'), async (req, res) => {
             Category,
             image: imageUrl
         });
-        console.log(newEvent);
+        console.log('Event to be saved:', newEvent);
 
         await newEvent.save();
 
         res.status(201).json({
             event: newEvent,
-            message: 'Event created successfully'
+            message: 'Event created successfully',
+            imageUrl: imageUrl
         });
 
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
+      console.error(error);
+      res.status(500).json({ message: error.message || 'Internal server error' });
     }
-});
+  }
+);
 
 router.put('/:id', async (req, res) => {
     try {
