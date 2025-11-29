@@ -15,6 +15,7 @@ const connectDB = async () => {
 
     } catch (error) {
         console.log('Error connecting to React Chat Project:', error.message);
+        process.exit(1);
     }
 }
 

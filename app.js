@@ -24,7 +24,7 @@ app.use('/api/auth', authRoutes)
 app.use('/api/adminUser', AdminUserRoutes)
 app.use('/api/contact', ContactRoutes)
 app.use('/api/reportedPost',sessionValidation, ReportedPostRoutes)
-app.use('/api/events',sessionValidation, eventRoutes)
+app.use('/api/events', eventRoutes)
 app.use('/api/rsvp', RSVPRoute)
 
 

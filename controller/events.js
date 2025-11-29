@@ -2,6 +2,7 @@ const router = require('express').Router();
 const EventForm = require('../models/EventForm');
 const multer = require('multer');
 const path = require('path');
+const sessionValidation = require('../middleware/Session');
 
 // Event search and filtering endpoint
 router.get('/search', async (req, res) => {
@@ -97,7 +98,7 @@ router.post(
   }
 );
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', sessionValidation, async (req, res) => {
     try {
         const { id } = req.params;
         const updateFields = req.body;
@@ -126,7 +127,7 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', sessionValidation, async (req, res) => {
     try {
         const { id } = req.params;
         console.log(id)
